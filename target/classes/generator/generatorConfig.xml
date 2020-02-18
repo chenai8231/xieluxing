@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+  PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+  "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+  <!-- 引入配置文件 -->
+  <properties resource="jdbc.properties"/>
+
+
+  <!-- 一个数据库一个context -->
+  <context id="Mysql" targetRuntime="Mybatis3Simple" defaultModelType="flat">
+    <!-- 生成的pojo，将implements Serializable -->
+    <!--<plugin type="org.mybatis.generator.plugins.SerializablePlugin"></plugin>-->
+
+    <property name="beginningDelimiter" value="`"/>
+    <property name="endingDelimiter" value="`"/>
+    <!-- 配置tk.mybatis插件 -->
+    <plugin type="tk.mybatis.mapper.generator.MapperPlugin">
+      <property name="mappers" value="tk.mybatis.MyMapper"/>
+    </plugin>
+
+
+    <!-- 数据库链接URL、用户名、密码 -->
+    <jdbcConnection
+      driverClass="${jdbc.driverClass}"
+      connectionURL="${jdbc.connectionURL}"
+      userId="${jdbc.username}"
+      password="${jdbc.password}">
+      <!--MySQL 不支持 schema 或者 catalog 所以需要添加这个-->
+      <property name="nullCatalogMeansCurrent" value="true"/>
+    </jdbcConnection>
+
+
+    <!-- 生成model模型，对应的包路径，以及文件存放路径(targetProject)，targetProject可以指定具体的路径,如./src/main/java，
+        也可以使用“MAVEN”来自动生成，这样生成的代码会在target/generatord-source目录下 -->
+    <javaModelGenerator targetPackage="com.czf.hello.spring.boot.mybatis.entity" targetProject="src/main/java" />
+
+
+    <!--对应的mapper.xml文件 -->
+    <sqlMapGenerator targetPackage="mapper" targetProject="src/main/resources"/>
+
+    <!-- 对应的Mapper接口类文件 -->
+    <javaClientGenerator
+      targetPackage="com.czf.hello.spring.boot.mybatis.mapper" targetProject="src/main/java" type="XMLMAPPER" />
+
+
+    <!-- 列出要生成代码的所有表，这里配置的是不生成Example文件 -->
+    <!-- schema即为数据库名 tableName为对应的数据库表 domainObjectName是要生成的实体类 enable*ByExample
+               是否生成 example类   -->
+    <table tableName="%" schema="test">
+      <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
+    </table>
+  </context>
+</generatorConfiguration>
